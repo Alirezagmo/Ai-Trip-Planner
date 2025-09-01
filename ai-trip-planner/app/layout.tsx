@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Poppins} from "next/font/google";
 import "./globals.css";
 import Provider from "./Provider";
+import { ClerkProvider } from "@clerk/nextjs";
+import { ConvexClientProvider } from "./ConvexClientProvider";
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -20,14 +22,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ClerkProvider>
     <html lang="en">
       <body
         className={poppins.className}
       >
-        <Provider>
+        <ConvexClientProvider>
         {children}
-        </Provider>
+        </ConvexClientProvider>
       </body>
     </html>
+    </ClerkProvider>
   );
 }

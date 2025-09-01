@@ -1,10 +1,14 @@
+'use client';
 import { Button } from '@/components/ui/button'
+import { HeroVideoDialog } from '@/components/ui/heroVideoDialog'
 import { Textarea } from '@/components/ui/textarea'
-import { Globe2, icons, Send } from 'lucide-react'
+import { useUser } from '@clerk/nextjs'
+import { ArrowDown, Globe2, Send } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 
-const Suggestion = [
+export const Suggestion = [
     {
         title:'Create New trip',
         icon: <Globe2 className='text-blue-400 w-5 h-5'/>
@@ -23,6 +27,16 @@ const Suggestion = [
     },
 ]
 function Hero() {
+const {user} = useUser();
+const router = useRouter();
+const onSend = () => {
+   if (!user) {
+    router.push('/sign-in');
+    return;
+   }
+   // Navigate user to create new trip
+   router.push('/create-new-trip');
+}
   return (
     <div className='mt-24 w-full flex justify-center'>
         {/* Content */}
@@ -35,7 +49,7 @@ function Hero() {
         <div className='border rounded-2xl p-4 relative'>
 <Textarea placeholder='Tell me what you want... '
 className='w-full h-28 bg-transparent border-none focus-visible:ring-0 shadow-none resize-none'/>
-<Button size={'icon'} className='absolute bottom-6 right-6'>
+<Button size={'icon'} className='absolute bottom-6 right-6' onClick={() => onSend()} >
     <Send className='h-4 w-4'/>
 </Button>
         </div>
@@ -48,10 +62,21 @@ className='w-full h-28 bg-transparent border-none focus-visible:ring-0 shadow-no
         </div>
     ))}
 </div>
+
         {/* Video Section */}
+<div className='flex items-center justify-center flex-col'>
+<h2 className='my-7 mt-14 flex gap-2 text-center'>Not sure where to start? <strong>See how it works</strong><ArrowDown/></h2>
+            <HeroVideoDialog
+  className="block dark:hidden"
+  animationStyle="from-center"
+  videoSrc="https://www.example.com/dummy-video"
+  thumbnailSrc="https://mma.prenwswire.com/media/1832506/Video_Thumbnail.jpg"
+  thumbnailAlt="Dummy Video Thumbnail"
+/>
+        </div>
 </div>
     </div>
   )
 }
 
-export default Hero
+export default Hero;
